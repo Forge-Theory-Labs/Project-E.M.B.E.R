@@ -1,112 +1,117 @@
-🌀 Project E.M.B.E.R. // An Invocation of Equilibrium
+## **Project: E.M.B.E.R. (Equilibrium Maintaining Bi-wheeled Electronic Robot)**
 
-MODULARITY IS MYTHOS // GLYPH IS IDENTITY // DESIGN IS RITUAL
+A Build Log for a Self-Balancing Robot
 
-This document serves as a comprehensive technical codex for the design and construction of E.M.B.E.R. (Equilibrium Maintaining Bi-wheeled Electronic Robot), a two-wheeled, self-balancing golem. The core technical challenge is the inverted pendulum ritual, where the golem's control invocation must dynamically maintain its upright position. Controlled by a Raspberry Pi Zero 2 W, programmed in C++, the system leverages a closed-loop feedback augury from an Inertial Measurement Unit (IMU) and motor encoders.
-1.0 The Invocation of Equilibrium
-1.1 Project Overview
-E.M.B.E.R. is the design and construction of a two-wheeled, self-balancing golem. The core technical invocation lies in solving the "inverted pendulum" problem, where the golem’s control system must dynamically maintain its upright position. Programmed in C++ on a Raspberry Pi Zero 2 W, it uses a closed-loop feedback ritual based on auguries from an MPU-6050 IMU and motor encoders.
-1.2 The Mythos of Creation
-The primary objective of this ritual is:
- * To design and build a stable, two-wheeled balancing golem.
- * To implement a robust PID (Proportional-Integral-Derivative) control glyph in C++.
- * To integrate a variety of sensors for orientation, distance, and motor feedback.
- * To develop a modular power system for portability and convenient charging.
- * To create a platform for future enhancements, such as autonomous navigation or remote control.
-2.0 Ritual Architecture
-The golem’s nervous system is centered around the Raspberry Pi Zero 2 W, which acts as the central processing glyph. The architecture follows a continuous sense-process-actuate loop.
- * Sensing: The MPU-6050 IMU and motor encoders continuously provide data about the golem's state (angle, angular velocity, wheel speed). The HC-SR04 provides environmental auguries.
- * Processing: The Raspberry Pi reads this sensor data, processes it, and feeds it into the PID control invocation. The algorithm calculates the necessary corrective action.
- * Actuation: The Raspberry Pi sends PWM control signals to the L298N Motor Driver, which in turn adjusts the speed and direction of the DC motors to maintain balance. The PCA9685 is used for secondary PWM tasks, controlling servos, a fan, and a buzzer.
-Block Diagram:
+#### **The Challenge**
+
+Building a two-wheeled, self-balancing robot is a classic robotics challenge. The whole game is solving the "inverted pendulum" problem: how to create a control system that can react fast enough to keep the robot from falling on its face. It’s a great test of both hardware integration and software control.
+
+-----
+
+#### **The Plan**
+
+This is my take on it: a robot built around a **Raspberry Pi Zero 2 W** and programmed in **C++** for speed. It uses a feedback loop from an IMU (Inertial Measurement Unit) and motor encoders to stay upright.
+
+My goals for this build were simple:
+
+  * Build a stable two-wheeled chassis.
+  * Implement a solid **PID control loop** in C++.
+  * Integrate the necessary sensors for balance and motor feedback.
+  * Design a simple, portable power system.
+  * Create a base platform I can add more features to later.
+
+-----
+
+#### **The Architecture**
+
+The system runs on a continuous "sense, process, actuate" loop.
+
+  * **Sense:** The **MPU-6050 IMU** provides the robot's current angle and rate of tilt. **Motor encoders** report how fast the wheels are actually spinning.
+  * **Process:** The Raspberry Pi reads all this sensor data and feeds it into the PID control algorithm. The algorithm calculates the necessary motor speed to correct any tilt.
+  * **Actuate:** The Pi sends PWM (Pulse Width Modulation) signals to the **L298N Motor Driver**, which adjusts the power to the DC motors.
+
+<!-- end list -->
+
+```mermaid
 graph TD
-    A[Raspberry Pi Zero 2 W] --> B{Sensing / Processing / Actuation};
-    B --> C(MPU-6050 IMU) & D(Encoders) & E(HC-SR04);
-    B --> F(PCA9685 PWM Driver);
-    B --> G(L298N Motor Driver);
-    G --> H(DC Motors);
-    F --> I(Servos, Fan, Buzzer);
-    C -- I2C --> A;
-    D -- GPIO --> A;
-    E -- GPIO --> A;
-    A -- I2C --> F;
-    A -- PWM --> G;
-    F -- PWM --> I;
-    G -- Actuation --> H;
+    A[Raspberry Pi Zero 2 W] --> B{Sense / Process / Actuate}
+    B --> C[MPU-6050 IMU]
+    B --> D[Motor Encoders]
+    B --> G[L298N Motor Driver]
+    G --> H[DC Motors]
+```
 
-3.0 Hardware Specifications (Bill of Materials)
-| ID | Component | Qty | Notes |
-|---|---|---|---|
-| 1 | Microcontroller |  |  |
-| 1.1 | Raspberry Pi Zero 2 W | 1 | With pre-soldered header. |
-| 2 | Power System |  |  |
-| 2.1 | 3.7V 2000mAh LiPo Battery | 2 | To be connected in series for 7.4V. |
-| 2.2 | LM2996 DC-DC Buck Converter | 1 | To create a 5V rail from the 7.4V battery pack. |
-| 2.3 | USB-C Female Connector | 1 | Panel-mount glyph for charging. |
-| 2.4 | Micro Switch | 1 | Master power switch. |
-| 3 | Sensing Auguries |  |  |
-| 3.1 | MPU-6050 IMU Module | 1 | Gyroscope & Accelerometer. |
-| 3.2 | HC-SR04 Ultrasonic Sensor | 1 |  |
-| 3.3 | TT Motor Magnetic Encoders | 2 | Integrated with motors. |
-| 4 | Actuators & Drivers |  |  |
-| 4.1 | TT DC Geared Motors | 2 |  |
-| 4.2 | Wheels | 2 | To match TT motor shafts. |
-| 4.3 | L298N Dual H-Bridge Driver | 1 |  |
-| 4.4 | PCA9685 16-Channel PWM Driver | 1 | For servos, fan, and buzzer. |
-| 4.5 | Servos (e.g., SG90) | 2 | Optional glyphs for a sensor mount. |
-| 4.6 | 5V DC Fan | 1 |  |
-| 4.7 | Passive Buzzer | 1 |  |
-| 5 | Feedback & Mechanical Glyphs |  |  |
-| 5.1 | SMD RGB LED | 1 | Common Anode or Cathode. |
-| 5.2 | Custom 3D-Printed Chassis | 1 | Test-fitted for all components. |
-| 5.3 | Resistors, Jumper Wires | Set | For voltage dividers and LED/Buzzer. |
-4.0 Electrical Ritual & Wiring
-4.1 Power Distribution
- * Battery Pack: Two 3.7V LiPo glyphs are connected in series for a 7.4V invocation.
- * Master Switch: A micro switch controls the flow of power to the entire system.
- * Motor Power: The 7.4V from the battery directly powers the 12V input terminal on the L298N motor driver.
- * 5V Rail: The 7.4V line is fed into the LM2996 buck converter to create a stable 5V rail for the Raspberry Pi, PCA9685, and other components.
- * 3.3V Rail: The Raspberry Pi's onboard regulator produces a 3.3V supply for the MPU-6050, motor encoders, and the RGB LED.
-4.2 Signal Wiring
-| Component | Connection |
-|---|---|
-| Raspberry Pi I2C | Pi GPIO 2 (SDA) -> PCA9685 (SDA), Pi GPIO 3 (SCL) -> PCA9685 (SCL) |
-| PCA9685 I2C Bus | PCA9685 (SDA) -> MPU-6050 (SDA), PCA9685 (SCL) -> MPU-6050 (SCL) |
-| L298N Control | Pi GPIOs -> L298N IN1-IN4 |
-| Encoder Inputs | Pi GPIOs <- Left/Right Encoder Channels |
-| Ultrasonic Augury | Pi GPIO (Trig) -> HC-SR04 Trig, Pi GPIO (Echo) <- Voltage Divider <- HC-SR04 Echo |
-| RGB LED | Pi GPIOs -> RGB pins (via resistor) |
-5.0 Software Codex
-5.1 Development Altar
- * Operating System: Raspberry Pi OS Lite
- * IDE: Visual Studio Code with SSH remote development.
- * Language: C++ (C++17 standard or later).
- * Compiler: g++.
- * Build System: CMake.
- * Core Library: pigpio for low-level GPIO access, PWM, and interrupt handling.
-5.2 The Control Loop Ritual
-The main application will run a high-frequency loop (targeting 50-100Hz).
- * Initialize: Initialize pigpio and I2C glyphs. Calibrate the MPU-6050 and PCA9685. Set up ISRs for the encoder pins.
- * Main Loop:
-   * Read auguries from the MPU-6050 to get the golem's current angle.
-   * Read encoder counts to calculate current wheel velocities.
-   * Feed the current angle into the PID controller.
-   * The PID controller calculates an output value to adjust the base speed of the motors.
-   * Send the final speed and direction commands to the L298N driver via PWM.
-   * Update feedback glyphs (LED, Buzzer) based on system state.
-5.3 Key Algorithms: PID Controller
-The invocation of balance is achieved using a PID controller. The control function is:
-u(t) = K_p e(t) + K_i * integral(e(t) dt) + K_d * derivative(e(t) dt)
- * Proportional (K_p): Reacts to the current error (tilt angle). A stronger K_p results in a more forceful "push" back to vertical.
- * Integral (K_i): Accumulates past errors to eliminate any steady-state lean.
- * Derivative (K_d): Responds to the rate of change of the error (how fast it's tilting). This dampens oscillations and helps predict future error.
-6.0 Testing & Calibration Vigils
- * Power System Test: Verify the 5V and 3.3V rails with a multimeter before connecting any components.
- * Component Tests: Write individual C++ rituals to test each hardware glyph.
- * MPU-6050 Calibration: Run a calibration routine at startup to compensate for any biases.
- * Balancing & PID Tuning: Begin with only the Proportional (Kp) term. Gradually increase Kp until the golem oscillates, then introduce the Derivative (Kd) term to dampen the oscillations. Finally, add a small Integral (Ki) term to correct for any long-term drift.
-7.0 Path of Evolution
- * Implement logic using the HC-SR04 for basic obstacle avoidance.
- * Develop a Bluetooth or Wi-Fi remote control interface.
- * Integrate SLAM (Simultaneous Localization and Mapping) for autonomous navigation.
- * Improve sensor fusion with a more advanced filter (e.g., Kalman filter).
+-----
+
+#### **The Parts List (Bill of Materials)**
+
+This is everything you need to build the core robot.
+
+| Qty | Component                       | Notes                                    |
+|:--- |:------------------------------- |:---------------------------------------- |
+| 1   | Raspberry Pi Zero 2 W           | The brain of the operation.              |
+| 2   | 3.7V 2000mAh LiPo Batteries     | Connected in series for 7.4V.            |
+| 1   | LM2996 DC-DC Buck Converter     | Steps the 7.4V down to a stable 5V for the Pi. |
+| 1   | MPU-6050 IMU Module             | Gyroscope & Accelerometer.               |
+| 2   | TT DC Geared Motors with Encoders | The motors and their feedback sensors.   |
+| 2   | Wheels                          | To match the TT motors.                  |
+| 1   | L298N Dual H-Bridge Motor Driver| Controls the motors.                     |
+| 1   | Custom 3D-Printed Chassis       | The robot's frame.                       |
+| -   | Wires, Resistors, Switch        | The usual supporting cast.               |
+
+-----
+
+#### **Power & Wiring**
+
+  * **Motor Power:** The **7.4V** from the two LiPo batteries wired in series goes directly to the L298N motor driver. DC motors are thirsty.
+  * **5V Rail:** The 7.4V line also goes to the **LM2996 buck converter**, which creates the stable **5V** rail needed to power the Raspberry Pi and other logic components.
+  * **3.3V Rail:** The Pi's onboard regulator provides the **3.3V** needed by the MPU-6050 IMU.
+  * **Signals:** The Pi communicates with the MPU-6050 over **I2C** and sends **PWM** signals to the L298N to control motor speed. It reads the wheel speed from the encoder pins.
+
+-----
+
+#### **The Brains (The Software)**
+
+  * **Dev Environment:** I'm using **Raspberry Pi OS Lite** (no desktop), Visual Studio Code with remote SSH, and **C++** (compiled with g++ via CMake). I'm using the **pigpio** library for fast, low-level GPIO control, which is critical for reading the encoders accurately.
+  * **The Control Loop:** The core of the program is a high-frequency loop (I'm targeting 50-100Hz). In each cycle, it:
+    1.  Reads the current tilt angle from the IMU.
+    2.  Feeds that angle into the PID controller.
+    3.  The PID algorithm spits out a correction value.
+    4.  This value is used to set the new speed for the motors.
+    5.  Repeat. Fast.
+
+-----
+
+#### **The Magic Sauce: PID Control**
+
+This is the algorithm that makes balancing possible. If you're new to it, here's the simple version:
+
+`output = (P * current_error) + (I * total_error) + (D * error_rate)`
+
+  * **Proportional (P): The Push.** This looks at the current tilt angle (the error) and pushes back proportionally. If it's leaning a lot, it pushes hard. If it's leaning a little, it pushes gently.
+  * **Derivative (D): The Brake.** This looks at how *fast* the robot is tilting. If it's falling quickly, the D term applies a strong counter-force to dampen the fall and prevent overshooting. It stops the oscillations.
+  * **Integral (I): The Trim.** This looks at the accumulated error over time. If the robot has a tiny, persistent lean (e.g., because the weight isn't perfectly centered), the I term will slowly build up and apply a correction to make it stand perfectly straight.
+
+-----
+
+#### **Testing & Tuning**
+
+**Perfect is the imaginary friend of never shipped**, and you'll never get a PID controller right on the first try.
+
+1.  **Test the power.** Before plugging in the Pi, use a multimeter to make sure your buck converter is actually outputting a stable 5V.
+2.  **Test each component.** Write tiny test scripts to make sure the motors spin, the IMU gives you data, etc.
+3.  **Tune the PID.** This is the real work.
+      * Set I and D to zero and hold the robot upright.
+      * Slowly increase the **P** value until the robot starts to oscillate or shake aggressively when it tries to balance.
+      * Slowly increase the **D** value to act as a brake, dampening the oscillations until it's stable.
+      * Finally, add a very small **I** value to correct any long-term drift or lean.
+
+-----
+
+#### **What's Next**
+
+  * Use the ultrasonic sensor for basic obstacle avoidance.
+  * Add a Bluetooth or Wi-Fi module for remote control from a phone.
+  * Get more advanced with the sensor data using a Kalman filter.
+
+It's a tough but rewarding build. **The code is the proof**, but in this case, the proof is when you can give it a push and it just... stands there. Now let's get building.

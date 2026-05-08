@@ -115,3 +115,9 @@ This is the algorithm that makes balancing possible. If you're new to it, here's
   * Get more advanced with the sensor data using a Kalman filter.
 
 It's a tough but rewarding build. **The code is the proof**, but in this case, the proof is when you can give it a push and it just... stands there. Now let's get building.
+<p align="center">
+  <img src="https://img.shields.io/badge/Forge‑Theory‑Labs‑Ecosystem-black" />
+  <img src="https://img.shields.io/badge/Semantic‑System‑typed-blue" />
+  <img src="https://img.shields.io/badge/SCP‑Capsule‑included-purple" />
+</p>
+
